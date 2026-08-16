@@ -1,17 +1,34 @@
-📊 Automador de Cotações Financeiras & Pipeline de DadosEste projeto consiste em uma pipeline automatizada de coleta, processamento e visualização de dados do mercado financeiro. Utilizando Python e Selenium, o script realiza web scraping das cotações das principais moedas e criptomoedas diretamente do Google Finance, consolida os dados com Pandas e envia para uma planilha no Google Sheets via API do Google Cloud Platform (GCP). Por fim, os dados são consumidos em tempo real por um painel interativo no Power BI.🏗️ Arquitetura da Solução+-------------------+      Web Scraping      +-------------------+
-|  Google Finance   | ---------------------> |   Python Script   |
-| (Fonte de Dados)  |   (Selenium WebDriver) | (Automação/ETL)   |
-+-------------------+                        +-------------------+
+# 📊 Automação de Cotações Financeiras & Pipeline de Dados
+
+Este projeto consiste em uma **pipeline automatizada de coleta, processamento, armazenamento e visualização de dados do mercado financeiro**.
+
+Utilizando **Python** e **Selenium**, o sistema realiza *web scraping* das cotações das principais moedas e criptomoedas diretamente do **Google Finance**, consolida e trata os dados com **Pandas** e os envia para uma planilha do **Google Sheets** por meio das APIs do **Google Cloud Platform (GCP)**.
+
+Por fim, os dados são consumidos por um painel interativo desenvolvido no **Streamlit**.
+
+---
+
+## 🏗️ Arquitetura da Solução
+
+```text
++-------------------+      Web Scraping       +-------------------+
+|                   | --------------------->  |                   |
+|  Google Finance   |    Selenium WebDriver   |   Python Script   |
+| (Fonte de Dados)  |                         | (Automação / ETL) |
+|                   |                         |                   |
++-------------------+                         +-------------------+
                                                        |
-                                            Autenticação & Escrita
-                                            (gspread / OAuth2)
-                                                       v
-+-------------------+    Importação de Dados  +-------------------+
-|     Power BI      | <--------------------- |   Google Sheets   |
-| (Dashboard BI)    |  (Conector do Sheets)  |    (database)     |
-+-------------------+                        +-------------------+
-Fluxo de Dados:Coleta (Extract): O Selenium executa em modo headless (em segundo plano) acessando o Google Finance para extrair as cotações atuais e variações percentuais das seguintes moedas/criptos: USD, EUR, CNY, BTC e ETH.Tratamento (Transform): O código limpa e padroniza a variação percentual e a formatação numérica usando Pandas e expressões regulares/métodos de string.Carga (Load): Utilizando a biblioteca gspread e as credenciais Service Account do Google Cloud Platform, os dados tratados são inseridos dinamicamente nas colunas correspondentes da planilha quote_db.Visualização (Visualize): O Power BI conecta-se à planilha do Google Sheets para atualização contínua dos indicadores e gráficos do painel de monitoramento.🛠️ Bibliotecas e Tecnologias UtilizadasAbaixo estão as principais bibliotecas Python e tecnologias aplicadas na automação:Tecnologia / BibliotecaFunção / PropósitopythonLinguagem base do projeto.seleniumAutomação e raspagem de dados web (Web Scraping).pandasManipulação, tratamento de dados e exibição final no terminal.gspreadAPI wrapper do Python para interagir de forma simples com o Google Sheets.oauth2clientGerenciamento de tokens e credenciais de conta de serviço (Service Account) do Google Cloud.datetime / timeObtenção da data atual para registro temporal e controle de delays durante as requisições.Google Cloud APIAtivação dos serviços Google Drive API e Google Sheets API.Power BIConstrução do dashboard para análise de métricas financeiras.🔐 Configuração do Google Cloud Platform (GCP) & Google SheetsPara vincular o script Python ao Google Sheets, siga os passos abaixo:Criar um Projeto no GCP:Acesse o Google Cloud Console.Crie um novo projeto (ex: Finance-Automation).Ativar APIs Necessárias:No painel da GCP, vá em APIs e Serviços > Biblioteca.Procure e ative a Google Sheets API e a Google Drive API.Criar Conta de Serviço (Service Account):Acesse APIs e Serviços > Credenciais > Criar Credenciais > Conta de Serviço.Defina um nome para a conta e avance.Na aba de Chaves da conta criada, selecione Adicionar chave > Criar nova chave (JSON).Baixe o arquivo JSON gerado e renomeie para chave.json no diretório raiz do seu projeto.Compartilhar a Planilha:Abra o arquivo chave.json e copie o e-mail presente no campo "client_email".Crie uma planilha no Google Sheets chamada quote_db.Clique em Compartilhar no Google Sheets e adicione o e-mail da Conta de Serviço como Editor.🚀 Como Executar o ProjetoPrerequisitosPython 3.8 ou superior instalado.Google Chrome instalado.Passo a PassoClone o repositório:git clone https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
-cd SEU-REPOSITORIO
-Instale as dependências:pip install pandas gspread oauth2client selenium
-Adicione a credencial do GCP:Insira o arquivo chave.json no diretório do projeto.Execute o script:python automacao_financeira.py
-📈 Dashboard no Power BIO painel foi desenvolvido para trazer insights visuais das oscilações de mercado e variação cambial do portfólio monitorado.🔗 Clique aqui para visualizar o Painel Interativo no Power BI📄 LicençaEste projeto é mantido sob a licença MIT.
+                                                       |
+                                              Autenticação & Escrita
+                                               gspread / OAuth2
+                                                       |
+                                                       ▼
++-------------------+      Importação de Dados     +-------------------+
+|                   | <-------------------------- |                   |
+|     Power BI      |    Conector Google Sheets   |   Google Sheets   |
+|  (Dashboard BI)   |                             |    (Database)     |
+|                   |                             |                   |
++-------------------+                             +-------------------+
+```
+
+---
