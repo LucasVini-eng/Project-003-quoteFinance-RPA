@@ -4,9 +4,7 @@
 
 > **Clique aqui para visualizar o Painel Interativo**
 
-\[<!-- Substitua o # pelo link do seu painel -->](https://project-003-quotefinance-rpa-btxecz6b27dmwymtsnruyd.streamlit.app/)
-
-[📊 Acessar (#)
+[📊 Acessar (https://project-003-quotefinance-rpa-btxecz6b27dmwymtsnruyd.streamlit.app/)
 
 ---
 
