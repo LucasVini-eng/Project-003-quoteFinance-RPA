@@ -1,5 +1,15 @@
 # 📊 Automação de Cotações Financeiras & Pipeline de Dados
 
+### 🔗 Painel Interativo
+
+> **Clique aqui para visualizar o Painel Interativo**
+
+\[<!-- Substitua o # pelo link do seu painel -->](https://project-003-quotefinance-rpa-btxecz6b27dmwymtsnruyd.streamlit.app/)
+
+[📊 Acessar (#)
+
+---
+
 Este projeto consiste em uma **pipeline automatizada de coleta, processamento, armazenamento e visualização de dados do mercado financeiro**.
 
 Utilizando **Python** e **Selenium**, o sistema realiza *web scraping* das cotações das principais moedas e criptomoedas diretamente do **Google Finance**, consolida e trata os dados com **Pandas** e os envia para uma planilha do **Google Sheets** por meio das APIs do **Google Cloud Platform (GCP)**.
@@ -188,4 +198,50 @@ Antes de executar o projeto, certifique-se de possuir:
 - Uma planilha do Google Sheets compartilhada com a Service Account.
 
 ---
+### 1. Instale as Dependências
+
+```bash
+pip install pandas gspread oauth2client selenium
+```
+
+---
+### 2. Adicione a Credencial do GCP
+
+Insira o arquivo:
+
+```text
+chave.json
+```
+
+no diretório raiz do projeto.
+
+
+## 🔮 Melhorias Futuras
+
+Algumas possíveis evoluções para o projeto:
+
+- [ ] Implementar banco de dados para armazenamento histórico;
+- [ ] Automatizar a execução utilizando agendamento;
+- [ ] Implementar tratamento de erros e sistema de logs;
+- [ ] Criar alertas para grandes variações nas cotações;
+- [ ] Containerizar a aplicação com Docker;
+- [ ] Realizar deploy da automação em ambiente cloud.
+
+---
+
+
+
+## 📄 Licença
+
+Este projeto é distribuído sob a licença **MIT**.
+
+Sinta-se à vontade para utilizar, estudar e adaptar o projeto conforme necessário.
+
+---
+
+\<div align="center">
+
+**📊 Desenvolvido com Python, Selenium, Pandas, Google Cloud e Streamlit**
+
+\</div>
 
