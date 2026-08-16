@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 st.set_page_config(
     page_title="Quote Analytics ($)",
@@ -24,23 +22,15 @@ load_css("style.css")
 
 @st.cache_data(ttl=60)
 def load_sheets_data():
-    """Carrega dados da planilha Google Sheets ou retorna dados mockados de contingência."""
-    credencial_json = "quotemonitor-504519-703d231b9827.json"
-    scope = [
-        "https://spreadsheets.google.com/feeds",
-        "https://www.googleapis.com/auth/drive"
-    ]
+    """Carrega dados da planilha pública do Google Sheets em formato XLSX ou retorna dados mockados de contingência."""
+    public_xlsx_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQx6J04PIEGYPmHyx4104LC92FrUsjNLQIy5kwISP53dfIX2qtNTx1KTmGPwZJmZm0a0BWkkAzJZvJ3/pub?output=xlsx"
     
     try:
-        creds = ServiceAccountCredentials.from_json_keyfile_name(credencial_json, scope)
-        client = gspread.authorize(creds)
-        spreadsheet = client.open("quote_db")
-        sheet = spreadsheet.sheet1
-        records = sheet.get_all_records()
-        df = pd.DataFrame(records)
+        # Lê a planilha diretamente do link público via pandas
+        df = pd.read_excel(public_xlsx_url)
         return df, None
     except Exception as e:
-        # Fallback Mock Data se a chave do Google Sheets não estiver presente/local
+        # Fallback: Dados simulados se o link não estiver acessível ou sem conexão
         dates = pd.date_range(end=datetime.now(), periods=30, freq='D')
         mock_data = []
         currencies = [
@@ -66,7 +56,6 @@ def load_sheets_data():
                 })
         
         return pd.DataFrame(mock_data), str(e)
-
 
 def clean_numeric(val_str, symbol=None):
     """Converte valores em texto da planilha para float e ajusta a escala das casas decimais."""
@@ -154,9 +143,12 @@ def clean_percentage(perc_str):
 
 
 def parse_date(dt_str):
-    """Realiza parse de datas no padrão brasileiro."""
-    if not dt_str or pd.isna(dt_str):
+    """Realiza parse de datas no padrão brasileiro ou objetos datetime do Excel."""
+    if dt_str is None or pd.isna(dt_str):
         return None
+    if isinstance(dt_str, (datetime, pd.Timestamp)):
+        return dt_str
+        
     dt_str = str(dt_str).strip()
     formats = ["%d/%m/%Y %H:%M:%S", "%d/%m/%Y %H:%M", "%d/%m/%Y", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"]
     for fmt in formats:
@@ -168,7 +160,6 @@ def parse_date(dt_str):
 
 df_raw, error_msg = load_sheets_data()
 
-# Processamento do DataFrame
 if not df_raw.empty and "DATA" in df_raw.columns:
     df = df_raw.copy()
     df["DATETIME"] = df["DATA"].apply(parse_date)
@@ -183,7 +174,7 @@ else:
 col_header, col_refresh = st.columns([4, 1])
 with col_header:
     st.markdown('<div class="main-title">Quote Analytics <span>($)</span></div>', unsafe_allow_html=1)
-    st.markdown('<div class="subtitle-text">Monitoramento em tempo real conectado ao Google Sheets</div>', unsafe_allow_html=1)
+    st.markdown('<div class="subtitle-text">Monitoramento em tempo real via Google Sheets (Public Link)</div>', unsafe_allow_html=1)
 
 with col_refresh:
     if st.button("🔄 Atualizar Dados"):
@@ -191,7 +182,7 @@ with col_refresh:
         st.rerun()
 
 if error_msg:
-    st.caption("ℹ️ *Exibindo dados de simulação (Chave do Google Sheets não configurada ou inacessível no servidor).*")
+    st.caption(f"ℹ️ *Exibindo dados de simulação (Não foi possível acessar a URL da planilha: {error_msg})*")
 
 st.markdown("### 📊 Cotações Atuais")
 
