@@ -25,7 +25,7 @@ load_css("style.css")
 @st.cache_data(ttl=60)
 def load_sheets_data():
     """Carrega dados da planilha Google Sheets ou retorna dados mockados de contingência."""
-    credencial_json = "quotemonitor-504519-703d231b9827.json"
+    credencial_json = "https://github.com/LucasVini-eng/secrets-quote-json/blob/ce7048b256ec97f8cb6311c696dfab044f159af7/quotemonitor-504519-703d231b9827.json"
     scope = [
         "https://spreadsheets.google.com/feeds",
         "https://www.googleapis.com/auth/drive"
